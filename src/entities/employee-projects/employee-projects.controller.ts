@@ -52,7 +52,7 @@ export class EmployeeProjectsController {
     description: 'employee-project connection was not found',
   })
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: string,
     @Body() updateEmployeeProjectDto: UpdateEmployeeProjectDto,
   ) {
     return this.employeeProjectsService.update(+id, updateEmployeeProjectDto);
@@ -65,7 +65,7 @@ export class EmployeeProjectsController {
     status: 404,
     description: 'employee-project connection was not found',
   })
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: string) {
     return this.employeeProjectsService.remove(+id);
   }
 }

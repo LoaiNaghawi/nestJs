@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
@@ -34,7 +35,7 @@ export class ProjectsController {
   @ApiOperation({ summary: 'get a project by id' })
   @ApiResponse({ status: 200, description: 'request was successful' })
   @ApiResponse({ status: 404, description: 'project was not found' })
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: string) {
     return this.projectsService.findOne(+id);
   }
 
@@ -42,7 +43,10 @@ export class ProjectsController {
   @ApiOperation({ summary: 'update a project' })
   @ApiResponse({ status: 200, description: 'project updated successfully' })
   @ApiResponse({ status: 404, description: 'project was not found' })
-  update(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto) {
+  update(
+    @Param('id', ParseIntPipe) id: string,
+    @Body() updateProjectDto: UpdateProjectDto,
+  ) {
     return this.projectsService.update(+id, updateProjectDto);
   }
 
@@ -50,7 +54,7 @@ export class ProjectsController {
   @ApiOperation({ summary: 'delete a project' })
   @ApiResponse({ status: 200, description: 'project deleted successfully' })
   @ApiResponse({ status: 404, description: 'project was not found' })
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: string) {
     return this.projectsService.remove(+id);
   }
 }
