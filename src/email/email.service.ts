@@ -5,10 +5,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Email } from './entities/email.entity';
 import { Repository } from 'typeorm';
 import * as nodemailer from 'nodemailer';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class EmailService {
   constructor(
+    private configService: ConfigService,
     @InjectRepository(Email)
     private emailRepository: Repository<Email>,
   ) {
@@ -18,7 +20,7 @@ export class EmailService {
       secure: false,
       auth: {
         user: 'yansoonsameer1@gmail.com',
-        pass: 'uzvkmciojnrvomyz',
+        pass: this.configService.get<string>('SMTP_PASSWORD'),
       },
     });
   }
