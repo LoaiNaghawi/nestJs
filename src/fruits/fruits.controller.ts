@@ -29,7 +29,7 @@ export class FruitsController {
   }
 
   @Get(':id')
-  getBanana(@Param('id') id: string) {
+  getBanana(@Param('id', ParseIntPipe) id: string) {
     return this.fruitsService.getBananaFruit(id);
   }
 
@@ -44,17 +44,20 @@ export class FruitsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: string) {
     return this.fruitsService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFruitDto: UpdateFruitDto) {
+  update(
+    @Param('id', ParseIntPipe) id: string,
+    @Body() updateFruitDto: UpdateFruitDto,
+  ) {
     return this.fruitsService.update(+id, updateFruitDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: string) {
     return this.fruitsService.remove(+id);
   }
 }
