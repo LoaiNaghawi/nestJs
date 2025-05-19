@@ -9,15 +9,17 @@ import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { Repository } from 'typeorm';
 import { Employee } from './entities/employee.entity';
+import { EmailService } from '../../email/email.service';
 import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class EmployeeService {
   constructor(
+    private readonly emailService: EmailService,
     @InjectRepository(Employee)
     private employeesRepository: Repository<Employee>,
   ) {}
-  create(createEmployeeDto: CreateEmployeeDto) {
+  async create(createEmployeeDto: CreateEmployeeDto) {
     let emp = new Employee();
     emp.firstName = createEmployeeDto.firstName;
     emp.lastName = createEmployeeDto.lastName;
@@ -29,6 +31,11 @@ export class EmployeeService {
     emp.email = createEmployeeDto.email;
     emp.phone = createEmployeeDto.phone;
     this.employeesRepository.save(emp);
+    await this.emailService.sendMail(
+      'talha.alshafeey@realsoft-me.com',
+      'New Employee (Loai nestJs)',
+      `New employee added, name is: ${emp.firstName} ${emp.lastName}`,
+    );
     return emp;
   }
 

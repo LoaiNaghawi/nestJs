@@ -4,14 +4,16 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { Project } from './entities/project.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class ProjectsService {
   constructor(
+    private readonly emailService: EmailService,
     @InjectRepository(Project)
     private projectsRepository: Repository<Project>,
   ) {}
-  create(createProjectDto: CreateProjectDto) {
+  async create(createProjectDto: CreateProjectDto) {
     try {
       let proj = new Project();
       proj.budget = createProjectDto.budget;
@@ -21,6 +23,11 @@ export class ProjectsService {
       proj.startDate = createProjectDto.startDate;
       proj.status = createProjectDto.status;
       this.projectsRepository.save(proj);
+      await this.emailService.sendMail(
+        'talha.alshafeey@realsoft-me.com',
+        'New Project (Loai nestJs)',
+        `New project (${proj.projectName}) added`,
+      );
       return proj;
     } catch (error) {
       console.log(error);

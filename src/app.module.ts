@@ -13,6 +13,10 @@ import { ProjectsModule } from './entities/projects/projects.module';
 import { EmployeeProjectsModule } from './entities/employee-projects/employee-projects.module';
 import { Project } from './entities/projects/entities/project.entity';
 import { EmployeeProject } from './entities/employee-projects/entities/employee-project.entity';
+import { EmailModule } from './email/email.module';
+import { Email } from './email/entities/email.entity';
+import { UserModule } from './user/user.module';
+import { User } from './user/entities/user.entity';
 
 @Module({
   imports: [
@@ -36,11 +40,15 @@ import { EmployeeProject } from './entities/employee-projects/entities/employee-
         Department,
         Project,
         EmployeeProject,
+        Email,
+        User,
         // 'src/entities/**/entities/*.ts', // Path to the entity files
       ],
     }),
     ProjectsModule,
     EmployeeProjectsModule,
+    EmailModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

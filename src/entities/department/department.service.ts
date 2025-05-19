@@ -4,14 +4,16 @@ import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { Repository } from 'typeorm';
 import { Department } from './entities/department.entity';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class DepartmentService {
   constructor(
+    private readonly emailService: EmailService,
     @InjectRepository(Department)
     private departmentsRepository: Repository<Department>,
   ) {}
-  create(createDepartmentDto: CreateDepartmentDto) {
+  async create(createDepartmentDto: CreateDepartmentDto) {
     try {
       let dept = new Department();
       dept.budget = createDepartmentDto.budget;
@@ -20,6 +22,11 @@ export class DepartmentService {
       dept.location = createDepartmentDto.location;
       dept.mgr = createDepartmentDto.mgrId;
       this.departmentsRepository.save(dept);
+      await this.emailService.sendMail(
+        'talha.alshafeey@realsoft-me.com',
+        'New Department (Loai nestJs)',
+        `New department (${dept.departmentName}) added`,
+      );
       return dept;
     } catch (error) {
       console.log(error);
